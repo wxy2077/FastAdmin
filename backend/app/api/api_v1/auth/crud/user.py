@@ -20,7 +20,20 @@ from app.api.api_v1.auth.schemas.user import UserCreate, UserUpdate
 
 
 class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
-    def get_by_email(self, db: Session, *, email: str) -> Optional[AdminUser]:
+
+    @staticmethod
+    def get_by_email(db: Session, *, email: str) -> Optional[AdminUser]:
+        """
+        通过email获取用户
+        参数里面的* 表示 后面调用的时候 要用指定参数的方法调用
+        正确调用方式
+            curd_user.get_by_email(db, email="xxx")
+        错误调用方式
+            curd_user.get_by_email(db, "xxx")
+        :param db:
+        :param email:
+        :return:
+        """
         return db.query(AdminUser).filter(AdminUser.email == email).first()
 
     def create(self, db: Session, *, obj_in: UserCreate) -> AdminUser:

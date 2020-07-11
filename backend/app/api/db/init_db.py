@@ -1,7 +1,9 @@
 from sqlalchemy.orm import Session
 
 from app.api.api_v1.auth.schemas import user as user_schemas
-from app.api.api_v1.auth.curd import curd_user
+from app.api.api_v1.auth.schemas import role as role_schemas
+
+from app.api.api_v1.auth.crud import curd_user, curd_role
 from app.core.config import settings
 
 
@@ -15,6 +17,20 @@ def init_db(db: Session) -> None:
     # But if you don't want to use migrations, create
     # the tables un-commenting the next line
     # Base.metadata.create_all(bind=engine)
+    for temp_role in settings.DEFAULT_ROLE:
+        role = curd_role.query_role(db, role_id=temp_role.get("role_id"))
+        if not role:
+            role_in = role_schemas.RoleCreate(
+                role_id=temp_role.get("role_id"),
+                role_name=temp_role.get("role_name"),
+                permission_id=temp_role.get("permission_id"),
+                re_mark=temp_role.get("re_mark")
+            )
+            role = curd_role.create(db, obj_in=role_in)
+            print(f"角色创建成功:{role.role_name}")
+        else:
+            print(f"此角色id已存在:{role.role_id}")
+
     user = curd_user.get_by_email(db, email=settings.FIRST_MALL)
 
     if not user:
@@ -25,6 +41,6 @@ def init_db(db: Session) -> None:
             role_id=settings.FIRST_ROLE
         )
         user = curd_user.create(db, obj_in=user_in)  # noqa: F841
-        print(f"用户创建成功")
+        print(f"{user.nickname}用户创建成功 角色id:{user.role_id}")
     else:
-        print("此邮箱已经注册过了")
+        print(f"{user.nickname}此用户邮箱:{user.email}已经注册过了")

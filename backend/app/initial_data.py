@@ -1,3 +1,13 @@
+
+"""
+
+创建初始化
+
+角色以及用户
+
+初始化配置信息在 app/core/config/
+
+"""
 import logging
 
 from app.api.db.init_db import init_db

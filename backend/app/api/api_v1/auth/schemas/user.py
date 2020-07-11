@@ -7,19 +7,11 @@
 # @Desc    :
 """
 
-user_id = Column(String(32), default=gen_id, comment="用户id")
-email = Column(String(128), unique=True, index=True, nullable=False, comment="邮箱")
-phone = Column(VARCHAR(16), unique=True, index=True, nullable=False, comment="手机号")
-nickname = Column(String(128), comment="用户昵称")
-hashed_password = Column(String(128), nullable=False, comment="密码")
-is_active = Column(Boolean(), default=False, comment="是否激活")
-role_id = Column(Integer, comment="角色表")
-
 """
 
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, AnyHttpUrl
 
 
 # Shared properties
@@ -29,12 +21,27 @@ class UserBase(BaseModel):
     is_active: Optional[bool] = True
 
 
-# Properties to receive via API on creation
+class UserAuth(BaseModel):
+    password: str
+
+
+# 邮箱登录认证 验证数据字段都叫username
+class UserEmailAuth(UserAuth):
+    username: EmailStr
+
+
+# 手机号登录认证 验证数据字段都叫username
+class UserPhoneAuth(UserAuth):
+    username: int
+
+
+# 创建账号需要验证的条件
 class UserCreate(UserBase):
     nickname: str
     email: EmailStr
     password: str
     role_id: int
+    avatar: AnyHttpUrl
 
 
 # Properties to receive via API on update
@@ -52,3 +59,10 @@ class UserInDBBase(UserBase):
 class UserInDB(UserInDBBase):
     hashed_password: str
 
+
+# 返回的用户信息
+class UserInfo(BaseModel):
+    role_id: int
+    role: str
+    nickname: str
+    avatar: AnyHttpUrl
