@@ -10,7 +10,7 @@ const data = Mock.mock({
     pageviews: '@integer(300, 5000)'
   }]
 })
-
+// console.log(data.items)
 module.exports = [
   {
     url: '/vue-admin-template/table/list',

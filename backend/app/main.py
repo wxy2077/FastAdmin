@@ -18,6 +18,10 @@ uvicorn main:app --host=127.0.0.1 --port=8010 --reload
 # 生产启动命令 去掉热重载 (可用supervisor托管后台运行)
 uvicorn main:app --host=127.0.0.1 --port=8010
 
+在backend文件夹下启动
+uvicorn app.main:app --host=127.0.0.1 --port=8010 --reload
+
+
 """
 
 

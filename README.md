@@ -23,10 +23,10 @@
 > 后续会着手自定义 https://github.com/PanJiaChen/vue-admin-template 模版，然后记录一步步修改开发的过程。
 
 可以持续关注个人博客Vue后台管理系列博客
-https://www.charmcode.cn/
+https://www.charmcode.cn/tags/Vue%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/
 
 博客园地址会同步发布(个人站点备份)
-https://www.cnblogs.com/CharmCode/
+https://www.cnblogs.com/CharmCode/tag/Vue%E5%90%8E%E5%8F%B0%E7%AE%A1%E7%90%86/
 
 
 
