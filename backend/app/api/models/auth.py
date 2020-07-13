@@ -11,9 +11,8 @@
 
 """
 import uuid
-from datetime import datetime
 
-from sqlalchemy import Boolean, Column, Integer, String, VARCHAR, BIGINT, DateTime
+from sqlalchemy import Boolean, Column, Integer, String, VARCHAR, BIGINT
 from app.api.db.base_class import Base
 
 
@@ -35,16 +34,12 @@ class AdminUser(Base):
     hashed_password = Column(String(128), nullable=False, comment="密码")
     is_active = Column(Boolean(), default=False, comment="邮箱是否激活")
     role_id = Column(Integer, comment="角色表")
-    create_time = Column(DateTime, default=datetime.now, onupdate=datetime.now, comment="创建时间")
-    update_time = Column(DateTime, default=datetime.now, onupdate=datetime.now, comment="更新时间")
-    is_delete = Column(Integer, default=0, comment="逻辑删除:0=未删除,1=删除")
 
 
 class AdminRole(Base):
     """
     简单的用户角色表设计
     """
-    __tablename__ = "admin_role"
     role_id = Column(Integer, primary_key=True, index=True, comment="角色Id")
     role_name = Column(String(64), comment="角色名字")
     permission_id = Column(BIGINT, comment="权限ID")

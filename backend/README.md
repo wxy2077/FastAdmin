@@ -19,7 +19,7 @@ app
 |____core                        
 | |______init__.py
 | |____config                    // 配置文件
-| | |______init__.py
+| | |______init__.py             // 根据虚拟环境导入不同配置
 | | |____development_config.py   // 开发配置
 | | |____production_config.py    // 生成配置
 | |____security.py               // token password验证          

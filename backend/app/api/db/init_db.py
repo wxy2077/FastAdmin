@@ -38,7 +38,8 @@ def init_db(db: Session) -> None:
             nickname=settings.FIRST_SUPERUSER,
             email=settings.FIRST_MALL,
             password=settings.FIRST_SUPERUSER_PASSWORD,
-            role_id=settings.FIRST_ROLE
+            role_id=settings.FIRST_ROLE,
+            avatar=settings.FIRST_AVATAR
         )
         user = curd_user.create(db, obj_in=user_in)  # noqa: F841
         print(f"{user.nickname}用户创建成功 角色id:{user.role_id}")

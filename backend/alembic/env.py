@@ -41,14 +41,6 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    # MYSQL_USERNAME = 'xxx'
-    # MYSQL_PASSWORD = "xxx"
-    # MYSQL_HOST = "xxx"
-    # MYSQL_DATABASE = 'xxx'
-    # SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@" \
-    #                           f"{MYSQL_HOST}/{MYSQL_DATABASE}?charset=utf8mb4"
-    # return SQLALCHEMY_DATABASE_URL
-
     from app.core.config import settings
     return settings.SQLALCHEMY_DATABASE_URL
 
