@@ -19,13 +19,13 @@ uvicorn main:app --host=127.0.0.1 --port=8010 --reload
 uvicorn main:app --host=127.0.0.1 --port=8010
 
 在backend文件夹下启动
-uvicorn app.main:app --host=127.0.0.1 --port=8010 --reload
+uvicorn main:app --host=127.0.0.1 --port=8010 --reload
 
 
 """
 
 
-from app.api import create_app
+from api import create_app
 
 
 app = create_app()

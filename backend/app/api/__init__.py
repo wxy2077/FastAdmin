@@ -16,12 +16,14 @@ from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError, ValidationError
 
-from app.api.api_v1.api import api_v1_router
-from app.core.config import settings
-from app.api.extensions import logger
+from api.api_v1.api import api_v1_router
+from api.admin.api import api_admin_router
 
-from app.api.utils.custom_exc import PostParamsError, UserTokenError, UserNotFound
-from app.api.utils import response_code
+from core.config import settings
+from api.extensions import logger
+
+from api.utils.custom_exc import PostParamsError, UserTokenError, UserNotFound
+from api.utils import response_code
 
 
 def create_app():
@@ -36,7 +38,7 @@ def create_app():
         openapi_url=f"{settings.API_V1_STR}/openapi.json"
     )
 
-    # 其余的一些全局配置可以写在这里
+    # 其余的一些全局配置可以写在这里 多了可以考虑拆分到其他文件夹
 
     # 跨域设置
     register_cors(app)
@@ -47,19 +49,29 @@ def create_app():
     # 注册捕获全局异常
     register_exception(app)
 
+    # 请求拦截
+    register_middleware(app)
+
     return app
 
 
 def register_router(app: FastAPI):
     """
     注册路由
+    这里暂时把两个API服务写到一起，后面在拆分
     :param app:
     :return:
     """
-
+    # 项目API
     app.include_router(
         api_v1_router,
         prefix=settings.API_V1_STR     # 前缀
+    )
+
+    # 后台管理API
+    app.include_router(
+        api_admin_router,
+        prefix=settings.API_V1_STR  # 前缀
     )
 
 
@@ -67,16 +79,13 @@ def register_cors(app: FastAPI):
     """
     支持跨域
 
-    貌似发现了一个bug
-    https://github.com/tiangolo/fastapi/issues/133
-
     :param app:
     :return:
     """
     if settings.BACKEND_CORS_ORIGINS:
         app.add_middleware(
             CORSMiddleware,
-            allow_origins=["*"],
+            allow_origins=settings.BACKEND_CORS_ORIGINS,
             allow_credentials=True,
             allow_methods=["*"],
             allow_headers=["*"],
@@ -94,7 +103,7 @@ def register_exception(app: FastAPI):
     两者有区别
 
         如果只捕获一个异常 启动会报错
-        @app.exception_handlers(UserNotFound)
+        @exception_handlers(UserNotFound)
     TypeError: 'dict' object is not callable
 
     :param app:
@@ -146,7 +155,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"内部参数参数错误\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"内部参数验证错误\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_500(message=exc.errors())
 
     @app.exception_handler(RequestValidationError)
@@ -157,7 +166,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"参数错误\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"请求参数格式错误\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_422(message=exc.errors())
 
     # 捕获全部异常
@@ -171,3 +180,22 @@ def register_exception(app: FastAPI):
         """
         logger.error(f"全局异常\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_500(message="服务器内部错误")
+
+
+def register_middleware(app: FastAPI):
+    """
+    请求响应拦截 hook
+
+    https://fastapi.tiangolo.com/tutorial/middleware/
+    :param app:
+    :return:
+    """
+
+    @app.middleware("http")
+    async def logger_request(request: Request, call_next):
+        # https://stackoverflow.com/questions/60098005/fastapi-starlette-get-client-real-ip
+        logger.info(f"访问记录:{request.method} url:{request.url}\nheaders:{request.headers}\nIP:{request.client.host}")
+
+        response = await call_next(request)
+
+        return response

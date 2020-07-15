@@ -12,14 +12,14 @@
 """
 
 # import secrets
-from typing import List, Union
+from typing import List, Union, Any
 
 from pydantic import AnyHttpUrl, BaseSettings, validator, IPvAnyAddress, EmailStr
 
 
 class Settings(BaseSettings):
     #
-    API_V1_STR: str = "/api/admin/v1"
+    API_V1_STR: str = "/api/mall/v1"
     # SECRET_KEY: str = secrets.token_urlsafe(32)
     # SECRET_KEY 记得保密生产环境 不要直接写在代码里面
     SECRET_KEY: str = "(-ASp+_)-Ulhw0848hnvVG-iqKyJSD&*&^-H3C9mqEqSl8KN-YRzRE"
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
     # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
     # 跨域
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ['http://localhost']
+    BACKEND_CORS_ORIGINS: List[str] = ['*']
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
     def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
@@ -64,7 +64,7 @@ class Settings(BaseSettings):
     ]
 
     # 默认生成用户数据
-    FIRST_SUPERUSER: str = "admin"
+    FIRST_SUPERUSER: str = "王小右"
     FIRST_MALL: EmailStr = "wg_python@163.com"
     FIRST_SUPERUSER_PASSWORD: str = "admin12345"
     FIRST_ROLE: int = 999  # 超级管理员

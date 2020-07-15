@@ -10,8 +10,8 @@
 """
 import logging
 
-from app.api.db.init_db import init_db
-from app.api.db.session import SessionLocal
+from api.db.init_db import init_db
+from api.db.session import SessionLocal
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)

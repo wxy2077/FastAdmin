@@ -12,9 +12,9 @@
 from typing import Optional
 from sqlalchemy.orm import Session
 
-from app.api.common.curd_base import CRUDBase
-from app.api.models.auth import AdminRole
-from app.api.api_v1.auth.schemas.role import RoleCreate, RoleUpdate
+from api.common.curd_base import CRUDBase
+from api.models.auth import AdminRole
+from api.admin.auth.schemas.role import RoleCreate, RoleUpdate
 
 
 class CRUDRole(CRUDBase[AdminRole, RoleCreate, RoleUpdate]):

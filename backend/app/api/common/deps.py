@@ -6,16 +6,16 @@ from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session
 
-# from app.api import models, crud, schemas
-from app.core import security
-from app.core.config import settings
-from app.api.db.session import SessionLocal
-from app.api.models import auth
-from app.api.api_v1.auth import schemas
-from app.api.api_v1.auth import crud
+# from api import models, crud, schemas
+from core import security
+from core.config import settings
+from api.db.session import SessionLocal
+from api.models import auth
+from api.admin.auth import schemas
+from api.admin.auth import crud
 
-from app.api.utils import custom_exc
-from app.api.extensions import logger
+from api.utils import custom_exc
+from api.extensions import logger
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/auth/login/access-token"
@@ -33,6 +33,12 @@ def get_db() -> Generator:
 def get_current_user(
     db: Session = Depends(get_db), token: Optional[str] = Header(None)
 ) -> auth.AdminUser:
+    """
+    根据header中token 获取当前用户
+    :param db:
+    :param token:
+    :return:
+    """
     if not token:
         raise custom_exc.UserTokenError(err_desc='headers not found token')
     try:

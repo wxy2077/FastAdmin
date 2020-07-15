@@ -1,13 +1,13 @@
 from sqlalchemy.orm import Session
 
-from app.api.api_v1.auth.schemas import user as user_schemas
-from app.api.api_v1.auth.schemas import role as role_schemas
+from api.admin.auth.schemas import user as user_schemas
+from api.admin.auth.schemas import role as role_schemas
 
-from app.api.api_v1.auth.crud import curd_user, curd_role
-from app.core.config import settings
+from api.admin.auth.crud import curd_user, curd_role
+from core.config import settings
 
 
-# make sure all SQL Alchemy models are imported (app.db.base) before initializing DB
+# make sure all SQL Alchemy models are imported (db.base) before initializing DB
 # otherwise, SQL Alchemy might fail to initialize relationships properly
 # for more details: https://github.com/tiangolo/full-stack-fastapi-postgresql/issues/28
 

@@ -28,7 +28,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 sys.path.insert(0, BASE_DIR)
 
-from app.api.db.base import Base  # noqa
+from api.db.base import Base  # noqa
 
 
 target_metadata = Base.metadata
@@ -41,7 +41,7 @@ target_metadata = Base.metadata
 
 
 def get_url():
-    from app.core.config import settings
+    from core.config import settings
     return settings.SQLALCHEMY_DATABASE_URL
 
 

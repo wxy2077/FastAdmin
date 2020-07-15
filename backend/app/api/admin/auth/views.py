@@ -9,18 +9,18 @@
 
 """
 from datetime import timedelta
-from typing import Any, Optional
+from typing import Any
 
 from sqlalchemy.orm import Session
-from fastapi import APIRouter, Depends, Header
+from fastapi import APIRouter, Depends
 
-from app.api.common import deps
-from app.api.utils import response_code
-from app.api.extensions import logger
+from api.common import deps
+from api.utils import response_code
+from api.extensions import logger
 
-from app.api.models import auth
-from app.core.config import settings
-from app.core import security
+from api.models import auth
+from core.config import settings
+from core import security
 
 from .schemas import user
 from .crud import curd_user, curd_role
@@ -33,16 +33,13 @@ async def login_access_token(
         *,
         db: Session = Depends(deps.get_db),
         user_info: user.UserEmailAuth,
-        user_agent: Optional[str] = Header(None)
 ) -> Any:
     """
     用户登录
     :param db:
     :param user_info:
-    :param user_agent:
     :return:
     """
-    logger.info(f"用户登录: email账号:{user_info.username}\nuser_agent:{user_agent}")
 
     # 验证用户
     user = curd_user.authenticate(db, email=user_info.username, password=user_info.password)

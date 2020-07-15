@@ -6,7 +6,7 @@
 #
 # from jose import jwt
 #
-# from app.core.config import settings
+# from core.config import settings
 #
 #
 # def send_email(

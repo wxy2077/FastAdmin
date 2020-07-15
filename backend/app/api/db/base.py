@@ -3,6 +3,12 @@
 
 # imported by Alembic # 方便在Alembic导入,迁移用
 
-from app.api.db.base_class import Base  # noqa
+from api.db.base_class import Base  # noqa
 
-from app.api.models.auth import AdminUser, AdminRole
+from api.models.auth import AdminUser, AdminRole, MallUser, MallAddress, MallSearchHistory, MallSiteNotice
+
+from api.models.express import MallFreightTemplate, MallRegion, MallShipper
+
+from api.models.goods import MallGoods, MallBanner, MallGoodsGallery, MallGoodsKeywords, MallGoodsSpecification
+
+from api.models.orders import MallOrder, MallCart, MallOrderExpress, MallOrderGoods

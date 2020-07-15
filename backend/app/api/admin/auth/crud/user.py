@@ -13,10 +13,10 @@ from typing import Optional
 
 from sqlalchemy.orm import Session
 
-from app.core.security import get_password_hash, verify_password
-from app.api.common.curd_base import CRUDBase
-from app.api.models.auth import AdminUser
-from app.api.api_v1.auth.schemas.user import UserCreate, UserUpdate
+from core.security import get_password_hash, verify_password
+from api.common.curd_base import CRUDBase
+from api.models.auth import AdminUser
+from api.admin.auth.schemas.user import UserCreate, UserUpdate
 
 
 class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
@@ -41,6 +41,7 @@ class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
             nickname=obj_in.nickname,
             email=obj_in.email,
             hashed_password=get_password_hash(obj_in.password),
+            avatar=obj_in.avatar,
             role_id=obj_in.role_id,
             is_active=obj_in.is_active
         )

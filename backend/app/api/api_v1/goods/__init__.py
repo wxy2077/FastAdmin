@@ -9,3 +9,4 @@
 
 """
 
+from .views import router

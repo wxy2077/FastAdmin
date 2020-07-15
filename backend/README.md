@@ -1,3 +1,4 @@
+# 后台API
 
 ## 后台API服务
 
@@ -103,6 +104,22 @@ sys.path.insert(0, BASE_DIR)
 > alembic upgrade head
 
 
+## 初始化账号密码 
+
+#### 生成初始化账号密码
+
+```shell
+cd app
+python initial_data.py
+
+```
+
+
+```shell
+username: wg_python@163.com
+password: admin12345
+```
+
 
 
 
@@ -115,3 +132,5 @@ sys.path.insert(0, BASE_DIR)
 - [alembic导入app noqa](https://stackoverflow.com/questions/32032940/how-to-import-the-own-model-into-myproject-alembic-env-py):https://stackoverflow.com/questions/32032940/how-to-import-the-own-model-into-myproject-alembic-env-py
 - [alembic教程](https://alembic.sqlalchemy.org/en/latest/tutorial.html) https://alembic.sqlalchemy.org/en/latest/tutorial.html
 - [alembic迁移](https://alembic.sqlalchemy.org/en/latest/tutorial.html#running-our-first-migration): https://alembic.sqlalchemy.org/en/latest/tutorial.html#running-our-first-migration
+- [海风小店](https://raw.githubusercontent.com/iamdarcy/hioshop-server/master/hiolabsDB.sql) https://raw.githubusercontent.com/iamdarcy/hioshop-server/master/hiolabsDB.sql
+- 
