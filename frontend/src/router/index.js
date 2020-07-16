@@ -54,97 +54,100 @@ export const constantRoutes = [
       meta: { title: '首页', icon: 'el-icon-s-home' }
     }]
   },
-
   {
-    path: '/example',
+    path: '/goods',
     component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: '节点示例', icon: 'el-icon-s-help' },
+    redirect: '/goods/display',
+    name: 'Goods',
+    meta: { title: '商品管理', icon: 'el-icon-s-goods' },
     children: [
       {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: '表格', icon: 'table' }
+        path: 'display',
+        component: () => import('@/views/goods/display/index'), // Parent router-view
+        name: 'Display',
+        meta: { title: '商品列表', icon: 'el-icon-tickets' }
       },
       {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: '树', icon: 'tree' }
+        path: 'setting',
+        component: () => import('@/views/goods/setting/index'),
+        name: 'Setting',
+        meta: { title: '商品设置', icon: 'el-icon-setting' }
+      },
+      {
+        path: 'add',
+        component: () => import('@/views/goods/add/index'),
+        name: 'Setting',
+        meta: { title: '添加商品', icon: 'el-icon-folder-add' }
       }
     ]
   },
-
   {
-    path: '/form',
+    path: '/orders',
     component: Layout,
     children: [
       {
         path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: '表单', icon: 'form' }
+        name: 'Orders',
+        component: () => import('@/views/orders/index'),
+        meta: { title: '订单', icon: 'el-icon-s-order' }
       }
     ]
   },
-
   {
-    path: '/nested',
+    path: '/user',
     component: Layout,
-    redirect: '/nested/menu1',
-    name: 'Nested',
-    meta: {
-      title: '多级路由',
-      icon: 'nested'
-    },
+    children: [{
+      path: 'index',
+      name: 'User',
+      component: () => import('@/views/user/index'),
+      meta: { title: '用户管理', icon: 'el-icon-user-solid' }
+    }]
+  },
+  {
+    path: '/cart',
+    component: Layout,
+    children: [{
+      path: 'index',
+      name: 'Cart',
+      component: () => import('@/views/cart/index'),
+      meta: { title: '购物车', icon: 'el-icon-shopping-cart-full' }
+    }]
+  },
+  {
+    path: '/shop',
+    component: Layout,
+    name: 'Shop',
+    meta: { title: '店铺设置', icon: 'el-icon-s-goods' },
     children: [
       {
-        path: 'menu1',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
-        name: 'Menu1',
-        meta: { title: '菜单一' },
-        children: [
-          {
-            path: 'menu1-1',
-            component: () => import('@/views/nested/menu1/menu1-1'),
-            name: 'Menu1-1',
-            meta: { title: '菜单1' }
-          },
-          {
-            path: 'menu1-2',
-            component: () => import('@/views/nested/menu1/menu1-2'),
-            name: 'Menu1-2',
-            meta: { title: '菜单-2' },
-            children: [
-              {
-                path: 'menu1-2-1',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-1'),
-                name: 'Menu1-2-1',
-                meta: { title: '菜单-2-1' }
-              },
-              {
-                path: 'menu1-2-2',
-                component: () => import('@/views/nested/menu1/menu1-2/menu1-2-2'),
-                name: 'Menu1-2-2',
-                meta: { title: '菜单-2-2' }
-              }
-            ]
-          },
-          {
-            path: 'menu1-3',
-            component: () => import('@/views/nested/menu1/menu1-3'),
-            name: 'Menu1-3',
-            meta: { title: '菜单-3' }
-          }
-        ]
+        path: 'ad',
+        component: () => import('@/views/shop/ad/index'), // Parent router-view
+        name: 'Ad',
+        meta: { title: '广告设置', icon: 'el-icon-reading' }
       },
       {
-        path: 'menu2',
-        component: () => import('@/views/nested/menu2/index'),
-        name: 'Menu2',
-        meta: { title: '菜单二' }
+        path: 'display',
+        component: () => import('@/views/shop/display/index'), // Parent router-view
+        name: 'Display',
+        meta: { title: '显示设置', icon: 'el-icon-monitor' }
+      },
+      {
+        path: 'freight',
+        component: () => import('@/views/shop/freight/index'), // Parent router-view
+        name: 'freight',
+        meta: { title: '运费模版', icon: 'el-icon-printer' }
+      },
+      {
+        path: 'shipper',
+        component: () => import('@/views/shop/shipper/index'), // Parent router-view
+        name: 'Shipper',
+        meta: { title: '快递设置', icon: 'el-icon-takeaway-box' }
+      },
+      {
+        path: 'notice',
+        component: () => import('@/views/shop/notice/index'), // Parent router-view
+        name: 'Notice',
+        meta: { title: '公告', icon: 'el-icon-message-solid' }
       }
     ]
   },
@@ -169,7 +172,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

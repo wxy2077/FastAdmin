@@ -1,7 +1,32 @@
 <template>
   <div class="dashboard-container">
+    <div class="base-info">
+      <el-row :gutter="8">
+        <el-col :lg="6" :md="12" :xs="24">
+          <div class="chart-wrapper">
+            <card-view />
+          </div>
+        </el-col>
+        <el-col :lg="6" :md="12" :xs="24">
+          <div class="chart-wrapper">
+            <card-view />
+          </div>
+        </el-col>
+        <el-col :lg="6" :md="12" :xs="24">
+          <div class="chart-wrapper">
+            <card-view />
+          </div>
+        </el-col>
+        <el-col :lg="6" :md="12" :xs="24">
+          <div class="chart-wrapper">
+            <card-view />
+          </div>
+        </el-col>
+      </el-row>
+    </div>
+
     <div class="mid">
-      <el-row :gutter="32">
+      <el-row :gutter="10">
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
             <pie-chart />
@@ -19,40 +44,56 @@
         </el-col>
       </el-row>
     </div>
+    <div class="bottom">
+      <line-chart />
+    </div>
   </div>
 </template>
 
 <script>
-import RadarChart from './component/RadarChart'
-import HistogramChart from './component/HistogramChart'
-import PieChart from './component/PieChart'
-export default {
-  name: 'Dashboard',
-  components: {
-    RadarChart,
-    HistogramChart,
-    PieChart
-  },
-  data() {
-    return {
-    }
-  }
+  import RadarChart from './component/RadarChart'
+  import HistogramChart from './component/HistogramChart'
+  import PieChart from './component/PieChart'
+  import CardView from './component/CardView'
+  import LineChart from './component/LineChart'
 
-}
+  export default {
+    name: 'Dashboard',
+    components: {
+      RadarChart,
+      HistogramChart,
+      PieChart,
+      CardView,
+      LineChart
+    },
+    data() {
+      return {}
+    }
+
+  }
 </script>
 
 <style lang="scss" scoped>
-  .dashboard-container{
-    margin: 30px 0 0 0;
-    padding-top: 0;
-    .mid{
+  .dashboard-container {
+    padding: 20px;
+    background-color: rgb(240, 242, 245);
+    .mid {
       width: 100%;
       height: 380px;
       .chart-wrapper {
         height: 340px;
-        padding: 16px 16px 0;
-        margin-bottom: 32px;
+        background-color: #fff;
+        padding: 10px 10px 0;
+        margin-bottom: 10px;
+        border-radius: 5px;
       }
+    }
+    .base-info {
+      width: 100%;
+    }
+    .bottom{
+      background-color: #FFF;
+      padding: 10px;
     }
   }
 </style>

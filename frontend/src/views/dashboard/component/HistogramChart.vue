@@ -5,8 +5,6 @@
 <script>
 import echarts from 'echarts'
 
-require('echarts/theme/macarons') // echarts theme
-
 export default {
   name: 'HistogramChart',
   props: {
@@ -45,7 +43,7 @@ export default {
       this.chart.setOption({
         title: {
           text: '新增用户/访问量',
-          subtext: '模拟的'
+          subtext: '最近10天'
         },
         tooltip: {
           trigger: 'axis'

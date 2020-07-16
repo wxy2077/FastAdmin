@@ -42,3 +42,4 @@ https://github.com/ElemeFE/v-charts  （5.8k star 饿了么开源的）
 还是直接用`echarts`,这个库没人维护了, https://github.com/ElemeFE/v-charts/issues/842
 
 https://echarts.apache.org/zh/api.html#echarts
+

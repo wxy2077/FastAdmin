@@ -1,10 +1,9 @@
 <template>
-  <div :class="className" :style="{height,width}" />
+  <div :class="className" :style="{height,width}"></div>
 </template>
 
 <script>
 import echarts from 'echarts'
-require('echarts/theme/macarons') // echarts theme
 
 const animationDuration = 3000
 export default {
