@@ -45,7 +45,13 @@
       </el-row>
     </div>
     <div class="bottom">
-      <line-chart />
+      <el-row :gutter="10">
+        <el-col :xs="24" :sm="24" :lg="24">
+          <div class="chart-wrapper">
+            <line-chart />
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -76,6 +82,7 @@
 <style lang="scss" scoped>
   .dashboard-container {
     padding: 20px;
+    height: 100%;
     background-color: rgb(240, 242, 245);
     .mid {
       width: 100%;
@@ -93,7 +100,9 @@
     }
     .bottom{
       background-color: #FFF;
-      padding: 10px;
+      padding: 20px;
+      height: 550px;
+      margin-bottom: 20px;
     }
   }
 </style>

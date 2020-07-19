@@ -117,7 +117,7 @@ export const constantRoutes = [
     path: '/shop',
     component: Layout,
     name: 'Shop',
-    meta: { title: '店铺设置', icon: 'el-icon-s-goods' },
+    meta: { title: '店铺设置', icon: 'el-icon-office-building' },
     children: [
       {
         path: 'ad',
