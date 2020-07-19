@@ -1,9 +1,8 @@
 from sqlalchemy.orm import Session
 
-from api.admin.auth.schemas import user as user_schemas
-from api.admin.auth.schemas import role as role_schemas
+from api.api_v1.auth.schemas import user as user_schemas, role as role_schemas
 
-from api.admin.auth.crud import curd_user, curd_role
+from api.api_v1.auth.crud import curd_user, curd_role
 from core.config import settings
 
 

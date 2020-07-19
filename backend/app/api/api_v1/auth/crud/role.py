@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 
 from api.common.curd_base import CRUDBase
 from api.models.auth import AdminRole
-from api.admin.auth.schemas.role import RoleCreate, RoleUpdate
+from api.api_v1.auth.schemas import RoleCreate, RoleUpdate
 
 
 class CRUDRole(CRUDBase[AdminRole, RoleCreate, RoleUpdate]):

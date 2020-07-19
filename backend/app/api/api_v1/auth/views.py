@@ -13,6 +13,7 @@ from typing import Any
 
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
+from core import security
 
 from api.common import deps
 from api.utils import response_code
@@ -20,7 +21,6 @@ from api.extensions import logger
 
 from api.models import auth
 from core.config import settings
-from core import security
 
 from .schemas import user
 from .crud import curd_user, curd_role
@@ -51,6 +51,7 @@ async def login_access_token(
 
     access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
 
+    # 登录token 只存放了user.id
     return response_code.resp_200(data={
         "token": security.create_access_token(user.id, expires_delta=access_token_expires),
         "token_type": "Bearer",

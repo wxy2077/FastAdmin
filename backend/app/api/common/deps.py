@@ -1,4 +1,4 @@
-from typing import Generator, Optional
+from typing import Generator, Optional, Union, Any
 
 from fastapi import Depends, Header
 from fastapi.security import OAuth2PasswordBearer
@@ -10,16 +10,10 @@ from sqlalchemy.orm import Session
 from core import security
 from core.config import settings
 from api.db.session import SessionLocal
-from api.models import auth
-from api.admin.auth import schemas
-from api.admin.auth import crud
+from api.models.auth import AdminUser
+from api.api_v1.auth import schemas, crud
 
 from api.utils import custom_exc
-from api.extensions import logger
-
-reusable_oauth2 = OAuth2PasswordBearer(
-    tokenUrl=f"{settings.API_V1_STR}/auth/login/access-token"
-)
 
 
 def get_db() -> Generator:
@@ -30,9 +24,28 @@ def get_db() -> Generator:
         db.close()
 
 
+def check_jwt_token(
+     token: Optional[str] = Header(None)
+) -> Union[str, Any]:
+    """
+    只解析验证token
+    :param token:
+    :return:
+    """
+
+    try:
+        payload = jwt.decode(
+            token,
+            settings.SECRET_KEY, algorithms=[security.ALGORITHM]
+        )
+        return schemas.TokenPayload(**payload)
+    except (jwt.JWTError, ValidationError, AttributeError):
+        raise custom_exc.UserTokenError(err_desc="access token fail")
+
+
 def get_current_user(
     db: Session = Depends(get_db), token: Optional[str] = Header(None)
-) -> auth.AdminUser:
+) -> AdminUser:
     """
     根据header中token 获取当前用户
     :param db:
@@ -41,14 +54,8 @@ def get_current_user(
     """
     if not token:
         raise custom_exc.UserTokenError(err_desc='headers not found token')
-    try:
-        payload = jwt.decode(
-            token,
-            settings.SECRET_KEY, algorithms=[security.ALGORITHM]
-        )
-        token_data = schemas.TokenPayload(**payload)
-    except (jwt.JWTError, ValidationError):
-        raise custom_exc.UserTokenError(err_desc="access token fail")
+
+    token_data = check_jwt_token(token)
     user = crud.curd_user.get(db, id=token_data.sub)
     if not user:
         raise custom_exc.UserNotFound(err_desc="user not found")

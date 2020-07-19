@@ -18,12 +18,10 @@ pip install loguru
 import os
 import time
 from loguru import logger
+from core.config import settings
 
-basedir = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
-# print(f"log basedir{basedir}")  # /xxx/python_code/FastAdmin/backend/app
 # 定位到log日志文件
-log_path = os.path.join(basedir, 'logs')
+log_path = os.path.join(settings.BASE_DIR, 'logs')
 
 if not os.path.exists(log_path):
     os.mkdir(log_path)

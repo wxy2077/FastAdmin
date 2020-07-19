@@ -18,6 +18,7 @@ from pydantic import AnyHttpUrl, BaseSettings, validator, IPvAnyAddress
 
 
 class Settings(BaseSettings):
+    DEBUG: bool = False
 
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)

@@ -17,7 +17,6 @@ from starlette.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError, ValidationError
 
 from api.api_v1.api import api_v1_router
-from api.admin.api import api_admin_router
 
 from core.config import settings
 from api.extensions import logger
@@ -52,7 +51,22 @@ def create_app():
     # 请求拦截
     register_middleware(app)
 
+    if settings.DEBUG:
+        # 注册静态文件
+        register_static_file(app)
+
     return app
+
+
+def register_static_file(app: FastAPI) -> None:
+    """
+    静态文件交互 生产使用 nginx
+    这里是开发是方便本地
+    :param app:
+    :return:
+    """
+    from fastapi.staticfiles import StaticFiles
+    app.mount("/assets", StaticFiles(directory="assets"), name="assets")
 
 
 def register_router(app: FastAPI):
@@ -65,12 +79,6 @@ def register_router(app: FastAPI):
     # 项目API
     app.include_router(
         api_v1_router,
-        prefix=settings.API_V1_STR     # 前缀
-    )
-
-    # 后台管理API
-    app.include_router(
-        api_admin_router,
         prefix=settings.API_V1_STR  # 前缀
     )
 
@@ -194,7 +202,7 @@ def register_middleware(app: FastAPI):
     @app.middleware("http")
     async def logger_request(request: Request, call_next):
         # https://stackoverflow.com/questions/60098005/fastapi-starlette-get-client-real-ip
-        logger.info(f"访问记录:{request.method} url:{request.url}\nheaders:{request.headers}\nIP:{request.client.host}")
+        # logger.info(f"访问记录:{request.method} url:{request.url}\nheaders:{request.headers}\nIP:{request.client.host}")
 
         response = await call_next(request)
 
