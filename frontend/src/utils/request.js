@@ -72,7 +72,7 @@ service.interceptors.response.use(
     }
   },
   error => {
-    console.log('err' + error) // for debug
+    // console.log('err' + error) // for debug
     Message({
       message: error.message,
       type: 'error',
@@ -82,4 +82,18 @@ service.interceptors.response.use(
   }
 )
 
-export default service
+export const request = (url, method = 'POST', data = {}) => {
+  // 参数配置 如果是get方法就 设置成params 参数， 其他则设置成data参数
+  const reConfig = method.toLocaleUpperCase() === 'GET' ? {
+    url,
+    method,
+    params: data
+  } : {
+    url,
+    method,
+    data
+  }
+  return service(reConfig)
+}
+
+export default request
