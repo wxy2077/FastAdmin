@@ -82,7 +82,7 @@
 <style lang="scss" scoped>
   .dashboard-container {
     padding: 20px;
-    height: 100%;
+    min-height: 100vh;
     background-color: rgb(240, 242, 245);
     .mid {
       width: 100%;

@@ -64,20 +64,29 @@ export const constantRoutes = [
       {
         path: 'display',
         component: () => import('@/views/goods/display/index'), // Parent router-view
-        name: 'Display',
+        name: 'GoodsDisplay',
         meta: { title: '商品列表', icon: 'el-icon-tickets' }
       },
       {
-        path: 'setting',
-        component: () => import('@/views/goods/setting/index'),
-        name: 'Setting',
-        meta: { title: '商品设置', icon: 'el-icon-setting' }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/goods/add/index'),
-        name: 'Setting',
-        meta: { title: '添加商品', icon: 'el-icon-folder-add' }
+        path: 'attribute',
+        component: () => import('@/views/goods/attribute/index'), // Parent router-view
+        name: 'Attribute',
+        meta: { title: '商品属性', icon: 'el-icon-setting' },
+        children: [
+          {
+            path: 'index',
+            component: () => import('@/views/goods/attribute/index'), // Parent router-view
+            name: 'Attribute',
+            meta: { title: '商品属性', icon: 'el-icon-setting' }
+          },
+          {
+            hidden: true,
+            path: 'cateview',
+            component: () => import('@/views/goods/attribute/component/CategoryView'), // Parent router-view
+            name: 'CateView',
+            meta: { title: '商品分类', icon: 'el-icon-tickets' }
+          }
+        ]
       }
     ]
   },

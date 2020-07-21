@@ -1,24 +1,24 @@
 import request from '@/utils/request'
 
 export function login(data) {
-  return request({
-    url: '/auth/login/access-token',
-    method: 'post',
+  return request(
+    '/auth/login/access-token',
+    'post',
     data
-  })
+  )
 }
 
 export function getInfo(token) {
-  return request({
-    url: '/auth/user/info',
-    method: 'get',
-    params: { token }
-  })
+  return request(
+    '/auth/user/info',
+    'get',
+    token
+  )
 }
 
 export function logout() {
-  return request({
-    url: '/auth/user/logout',
-    method: 'post'
-  })
+  return request(
+    '/auth/user/logout',
+    'post'
+  )
 }

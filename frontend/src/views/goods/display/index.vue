@@ -1,5 +1,4 @@
 <template>
-
   <div class="index">
     <h2>商品展示</h2>
   </div>
