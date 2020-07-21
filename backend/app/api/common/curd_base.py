@@ -35,12 +35,13 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         self.model = model
 
     def get(self, db: Session, id: Any) -> Optional[ModelType]:
-        return db.query(self.model).filter(self.model.id == id).first()
+        return db.query(self.model).filter(self.model.id == id, self.model.is_delete == 0).first()
 
     def get_multi(
-        self, db: Session, *, skip: int = 0, limit: int = 100
+        self, db: Session, *, page: int = 0, page_size: int = 100
     ) -> List[ModelType]:
-        return db.query(self.model).offset(skip).limit(limit).all()
+        temp_page = (page - 1) * page_size
+        return db.query(self.model).filter(self.model.is_delete == 0).offset(temp_page).limit(page_size).all()
 
     def create(self, db: Session, *, obj_in: CreateSchemaType) -> ModelType:
         obj_in_data = jsonable_encoder(obj_in)
@@ -71,7 +72,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, UpdateSchemaType]):
         return db_obj
 
     def remove(self, db: Session, *, id: int) -> ModelType:
-        obj = db.query(self.model).get(id)
-        db.delete(obj)
+        obj = db.query(self.model).filter(self.model.id == id).update({self.model.is_delete: 1})
+        # db.delete(obj)
         db.commit()
         return obj

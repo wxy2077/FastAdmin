@@ -10,39 +10,81 @@
 """
 
 """
-
-from fastapi import APIRouter, Depends
+from typing import Union, Any
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from api.common import deps
 from api.utils import response_code
 from api.extensions import logger
-from api.models import auth
-from .schemas.goods import CategoryCreate
+from .schemas.goods import CategoryCreate, CategoryUpdate, CategoryDel
 from .crud.goods import curd_category
-from core.config import settings
 
 router = APIRouter()
 
 
 @router.post("/add/goods", summary="添加商品")
-async def goods_add(current_user: auth.AdminUser = Depends(deps.get_current_user)):
-    """
-    用户退出
-    :param current_user:
-    :return:
-    """
-    logger.info(settings.BASE_DIR)
+async def goods_add(
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+):
+    # TODO(新增商品)
     return response_code.resp_200(data="ok")
+
+
+@router.get("/query/category/list", summary="查询分类列表")
+async def query_category_list(
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+        page: int = Query(1, ge=1, title="当前页"),
+        page_size: int = Query(10, le=50, title="页码长度")
+):
+    logger.info(f"查询分类列表->用户id:{token_data.sub}当前页{page}长度{page_size}")
+    response_result = curd_category.query_all(db, page=page, page_size=page_size)
+    return response_code.resp_200(data=response_result)
+
+
+@router.get("/query/category/", summary="查询分类")
+async def query_category(
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+        cate_id: int = Query(..., title="查询当前分类"),
+):
+    logger.info(f"查询分类->用户id:{token_data.sub}分类:{cate_id}")
+    response_result = curd_category.query_obj(db, cate_id=cate_id)
+    return response_code.resp_200(data=response_result)
 
 
 @router.post("/add/category", summary="添加分类")
-async def goods_add(goods_category: CategoryCreate, db: Session = Depends(deps.get_db),current_user: auth.AdminUser = Depends(deps.get_current_user)):
-    """
-    用户退出
-    :param goods_category:
-    :param current_user:
-    :return:
-    """
-    curd_category.create(db=db, obj_in=goods_category)
-    return response_code.resp_200(data="ok")
+async def add_category(
+        category_info: CategoryCreate,
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+):
+    logger.info(f"添加分类->用户id:{token_data.sub}分类名:{category_info.name}")
+    curd_category.create(db=db, obj_in=category_info)
+    return response_code.resp_200(message="分类添加成功")
+
+
+@router.post("/modify/category", summary="修改分类")
+async def modify_category(
+        cate_info: CategoryUpdate,
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+):
+    logger.info(f"修改分类->用户id:{token_data.sub}分类id:{cate_info.id}")
+    curd_category.update_cate(db=db, obj_in=cate_info)
+
+    return response_code.resp_200(message="修改成功")
+
+
+@router.post("/del/category", summary="删除分类")
+async def modify_category(
+        cate_ids: CategoryDel,
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+):
+    logger.info(f"修改分类->用户id:{token_data.sub}分类id:{cate_ids.ids}")
+    for cate_id in cate_ids.ids:
+        curd_category.remove(db=db, id=cate_id)
+    return response_code.resp_200(message="删除成功")

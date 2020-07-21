@@ -29,6 +29,7 @@ MANIFEST
 node_modules
 
 /dist
+/assets
 
 # local env files
 .env.local

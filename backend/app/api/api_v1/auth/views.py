@@ -9,7 +9,7 @@
 
 """
 from datetime import timedelta
-from typing import Any
+from typing import Any, Union
 
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends
@@ -81,42 +81,12 @@ async def get_user_info(
 
 
 @router.post("/user/logout", summary="用户退出")
-async def user_logout(current_user: auth.AdminUser = Depends(deps.get_current_user)):
+async def user_logout(token_data: Union[str, Any] = Depends(deps.check_jwt_token),):
     """
     用户退出
-    :param current_user:
+    :param token_data:
     :return:
     """
+    logger.info(f"用户退出->用户id:{token_data.sub}")
     return response_code.resp_200(data="ok")
 
-
-@router.get("/table/list", summary="临时table_list接口")
-async def test_table_list():
-    return response_code.resp_200(data={
-        "items": [
-            {
-                "id": '530000198812025837',
-                "title": '标题11111',
-                "status": 'published',
-                "author": '作者1',
-                "display_time": '2011-06-09 04:49:53',
-                "pageviews": 2540
-            },
-            {
-                "id": '222222222222',
-                "title": '标题2222',
-                "status": 'draft',
-                "author": '作者2',
-                "display_time": '2011-06-09 04:49:53',
-                "pageviews": 2540
-            },
-            {
-                "id": '33333',
-                "title": '标题33333',
-                "status": 'deleted',
-                "author": '作者3333',
-                "display_time": '2011-06-09 04:49:53',
-                "pageviews": 2540
-            }
-        ]
-    })

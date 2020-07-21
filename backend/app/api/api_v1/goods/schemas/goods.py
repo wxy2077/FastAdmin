@@ -10,8 +10,8 @@
 """
 验证 goods 的模型
 """
-
-from pydantic import BaseModel, AnyHttpUrl
+from typing import Union, List
+from pydantic import BaseModel, AnyHttpUrl, conint
 
 
 class GoodsBase(BaseModel):
@@ -26,16 +26,6 @@ class GoodsCreate(GoodsBase):
     pass
 
 
-"""
-name = Column(VARCHAR(64), comment="分类名称")
-    front_desc = Column(VARCHAR(256), comment="分类描述")
-    parent_id = Column(Integer, index=True, comment="父id")
-    sort_order = Column(SmallInteger, default=10, comment="排序")
-    icon_url = Column(VARCHAR(256), comment="分类显示icon")
-    enabled = Column(SmallInteger, d
-"""
-
-
 class CategoryCreate(BaseModel):
     """
     新增分类
@@ -48,7 +38,14 @@ class CategoryCreate(BaseModel):
 
 
 class CategoryUpdate(CategoryCreate):
-   pass
+    """
+    更新分类
+    """
+    id: Union[int, str]
 
 
-
+class CategoryDel(BaseModel):
+    """
+    逻辑删除
+    """
+    ids: List[int]

@@ -127,7 +127,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"token未知用户\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"token未知用户\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
 
         return response_code.resp_5001(message=exc.err_desc)
 
@@ -139,7 +139,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"用户认证异常\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"用户认证异常\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
 
         return response_code.resp_5000(message=exc.err_desc)
 
@@ -151,7 +151,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"参数查询异常\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"参数查询异常\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
 
         return response_code.resp_400(message=exc.err_desc)
 
@@ -163,7 +163,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"内部参数验证错误\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"内部参数验证错误\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_500(message=exc.errors())
 
     @app.exception_handler(RequestValidationError)
@@ -174,7 +174,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"请求参数格式错误\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"请求参数格式错误\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_422(message=exc.errors())
 
     # 捕获全部异常
@@ -186,7 +186,7 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"全局异常\nURL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(f"全局异常\n{request.method}URL:{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_500(message="服务器内部错误")
 
 
