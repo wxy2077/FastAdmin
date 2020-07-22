@@ -4,11 +4,11 @@
     <h3 v-else>新增分类</h3>
     <el-form ref="form" :rules="rules" :model="form" label-width="100px">
       <el-form-item label="分类名称:" required prop="name">
-        <el-input v-model="form.name" style="width: 300px"></el-input>
+        <el-input v-model="form.name" style="width: 300px" clearable></el-input>
       </el-form-item>
 
       <el-form-item label="分类简介:" prop="front_desc">
-        <el-input v-model="form.front_desc" type="textarea" style="width: 500px"></el-input>
+        <el-input v-model="form.front_desc" type="textarea" style="width: 500px" clearable></el-input>
       </el-form-item>
 
       <el-form-item label="分类图片" required>
@@ -45,7 +45,7 @@
           <template v-if="modifyCateId">立即修改</template>
           <template v-else>立即创建</template>
         </el-button>
-        <el-button>取消</el-button>
+        <el-button @click="resetFrom('form')" type="success" plain>重置表单</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -144,6 +144,9 @@
             this.form = res.data
           })
         }
+      },
+      resetFrom(formName) {
+        this.$refs[formName].resetFields()
       }
     }
   }

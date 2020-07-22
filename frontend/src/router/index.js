@@ -71,22 +71,7 @@ export const constantRoutes = [
         path: 'attribute',
         component: () => import('@/views/goods/attribute/index'), // Parent router-view
         name: 'Attribute',
-        meta: { title: '商品属性', icon: 'el-icon-setting' },
-        children: [
-          {
-            path: 'index',
-            component: () => import('@/views/goods/attribute/index'), // Parent router-view
-            name: 'Attribute',
-            meta: { title: '商品属性', icon: 'el-icon-setting' }
-          },
-          {
-            hidden: true,
-            path: 'cateview',
-            component: () => import('@/views/goods/attribute/component/CategoryView'), // Parent router-view
-            name: 'CateView',
-            meta: { title: '商品分类', icon: 'el-icon-tickets' }
-          }
-        ]
+        meta: { title: '商品属性', icon: 'el-icon-setting' }
       }
     ]
   },
