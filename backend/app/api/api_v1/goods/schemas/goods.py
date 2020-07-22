@@ -49,3 +49,19 @@ class CategoryDel(BaseModel):
     逻辑删除
     """
     ids: List[int]
+
+
+class CategoryEnable(CategoryDel):
+    """
+    批量操作开启开关 继承 ids:List[int]
+    """
+    enabled: int
+
+
+class CategorySearch(BaseModel):
+    """
+    搜索分类
+    """
+    key_world: str
+    page: conint(ge=1) = 1
+    page_size: conint(le=50) = 10

@@ -1,11 +1,4 @@
-# 后台API
-
 ## 后台API服务
-
-```
-pip install pydantic[email]
-
-```
 
 ## 项目文件组织
 > 参考Django文件组织,FastAPI官方推荐项目生成,Flask工厂函数。
@@ -133,4 +126,6 @@ password: admin12345
 - [alembic教程](https://alembic.sqlalchemy.org/en/latest/tutorial.html) https://alembic.sqlalchemy.org/en/latest/tutorial.html
 - [alembic迁移](https://alembic.sqlalchemy.org/en/latest/tutorial.html#running-our-first-migration): https://alembic.sqlalchemy.org/en/latest/tutorial.html#running-our-first-migration
 - [海风小店](https://raw.githubusercontent.com/iamdarcy/hioshop-server/master/hiolabsDB.sql) https://raw.githubusercontent.com/iamdarcy/hioshop-server/master/hiolabsDB.sql
-- 
+- [SqlAlchemy官网](https://docs.sqlalchemy.org/en/13/orm/query.html) https://docs.sqlalchemy.org/en/13/orm/query.html
+- [SqlAlchemy过滤操作](https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_filter_operators.htm) https://www.tutorialspoint.com/sqlalchemy/sqlalchemy_orm_filter_operators.htm
+- [SqlAlchemy包含操作](https://stackoverflow.com/questions/4926757/sqlalchemy-query-where-a-column-contains-a-substring) https://stackoverflow.com/questions/4926757/sqlalchemy-query-where-a-column-contains-a-substring

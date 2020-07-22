@@ -17,7 +17,7 @@ from sqlalchemy.orm import Session
 from api.common import deps
 from api.utils import response_code
 from api.extensions import logger
-from .schemas.goods import CategoryCreate, CategoryUpdate, CategoryDel
+from .schemas.goods import CategoryCreate, CategoryUpdate, CategoryDel, CategoryEnable, CategorySearch
 from .crud.goods import curd_category
 
 router = APIRouter()
@@ -86,5 +86,33 @@ async def modify_category(
 ):
     logger.info(f"修改分类->用户id:{token_data.sub}分类id:{cate_ids.ids}")
     for cate_id in cate_ids.ids:
-        curd_category.remove(db=db, id=cate_id)
+        curd_category.remove(db, id=cate_id)
     return response_code.resp_200(message="删除成功")
+
+
+@router.post("/enabled/category", summary="分类开启或关闭")
+async def enabled_category(
+        cate_info: CategoryEnable,
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+):
+    logger.info(f"开启分类操作->用户id:{token_data.sub}分类id:{cate_info.ids}操作:{cate_info.enabled}")
+    for cate_id in cate_info.ids:
+        curd_category.update_enabled(db, id=cate_id, enabled=cate_info.enabled)
+    if cate_info.enabled == 1:
+        message = "开启分类成功"
+    else:
+        message = "关闭分类成功"
+    return response_code.resp_200(message=message)
+
+
+@router.post("/search/category", summary="搜索分类")
+async def search_category(
+        cate_info: CategorySearch,
+        db: Session = Depends(deps.get_db),
+        token_data: Union[str, Any] = Depends(deps.check_jwt_token),
+):
+    logger.info(f"搜索分类操作->用户id:{token_data.sub}搜索{cate_info.key_world}:{cate_info.key_world}"
+                f"页码:{cate_info.page}长度{cate_info.page_size}")
+    response_result = curd_category.search_field(db, cate_info=cate_info)
+    return response_code.resp_200(data=response_result)

@@ -1,7 +1,7 @@
 from typing import Generator, Optional, Union, Any
 
 from fastapi import Depends, Header
-from fastapi.security import OAuth2PasswordBearer
+# from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
 from sqlalchemy.orm import Session

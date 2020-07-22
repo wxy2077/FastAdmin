@@ -12,13 +12,13 @@
 """
 
 from pydantic import conint
-from sqlalchemy import func
+from sqlalchemy import func, or_
 from sqlalchemy.orm import Session
 # from sqlalchemy.ext.serializer import dumps
 
 from api.common.curd_base import CRUDBase
 from api.models.goods import MallCategory
-from ..schemas.goods import CategoryCreate, CategoryUpdate
+from ..schemas.goods import CategoryCreate, CategoryUpdate, CategorySearch
 
 
 class CRUDCategory(CRUDBase[MallCategory, CategoryCreate, CategoryUpdate]):
@@ -36,6 +36,27 @@ class CRUDCategory(CRUDBase[MallCategory, CategoryCreate, CategoryUpdate]):
         return {"id": obj.id, 'create_time': obj.create_time.strftime('%Y-%m-%d %H:%M:%S'), "name": obj.name,
                 "front_desc": obj.front_desc, "parent_id": obj.parent_id, "sort_order": obj.sort_order,
                 "icon_url": obj.icon_url, "enabled": obj.enabled}
+
+    @staticmethod
+    def search_field(db: Session, *, cate_info: CategorySearch):
+        temp_page = (cate_info.page - 1) * cate_info.page_size
+        # 查询数量包含关键词的数量
+        total = db.query(func.count(MallCategory.id)).filter(
+            or_(MallCategory.name.contains(cate_info.key_world),
+                MallCategory.front_desc.contains(cate_info.key_world))).scalar()
+        # 查询name和front_desc包含搜索关键词的数据并分页
+        search_obj = db.query(MallCategory).filter(
+            or_(MallCategory.name.contains(cate_info.key_world),
+                MallCategory.front_desc.contains(cate_info.key_world))).offset(
+            temp_page).limit(cate_info.page_size).all()
+
+        items = [{"id": obj.id, 'create_time': obj.create_time.strftime('%Y-%m-%d %H:%M:%S'), "name": obj.name,
+                  "front_desc": obj.front_desc, "sort_order": obj.sort_order,
+                  "icon_url": obj.icon_url, "enabled": obj.enabled} for obj in search_obj]
+        return {
+            "items": items,
+            "total": total
+        }
 
     @staticmethod
     def query_all(db: Session, *, page: int = 1, page_size: conint(le=50) = 10) -> dict:
@@ -84,6 +105,11 @@ class CRUDCategory(CRUDBase[MallCategory, CategoryCreate, CategoryUpdate]):
             MallCategory.icon_url: obj_in.icon_url,
             MallCategory.enabled: obj_in.enabled
         })
+        db.commit()
+
+    @staticmethod
+    def update_enabled(db: Session, *, id: int, enabled: int):
+        db.query(MallCategory).filter(MallCategory.id == id).update({MallCategory.enabled: enabled})
         db.commit()
 
 
