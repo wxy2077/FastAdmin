@@ -15,12 +15,12 @@ import traceback
 from fastapi import FastAPI, Request
 from starlette.middleware.cors import CORSMiddleware
 from fastapi.exceptions import RequestValidationError, ValidationError
+from aioredis import create_redis_pool
 
-from api.api_v1.api import api_v1_router
 
 from core.config import settings
-from api.extensions import logger
-
+from api.api_v1.api import api_v1_router
+from api.common.logger import logger
 from api.utils.custom_exc import PostParamsError, UserTokenError, UserNotFound
 from api.utils import response_code
 
@@ -50,6 +50,9 @@ def create_app():
 
     # 请求拦截
     register_middleware(app)
+
+    # 挂载redis
+    register_redis(app)
 
     if settings.DEBUG:
         # 注册静态文件
@@ -127,7 +130,8 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"token未知用户\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(
+            f"token未知用户\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
 
         return response_code.resp_5001(message=exc.err_desc)
 
@@ -163,7 +167,8 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"内部参数验证错误\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(
+            f"内部参数验证错误\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_500(message=exc.errors())
 
     @app.exception_handler(RequestValidationError)
@@ -174,7 +179,8 @@ def register_exception(app: FastAPI):
         :param exc:
         :return:
         """
-        logger.error(f"请求参数格式错误\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
+        logger.error(
+            f"请求参数格式错误\nURL:{request.method}{request.url}\nHeaders:{request.headers}\n{traceback.format_exc()}")
         return response_code.resp_422(message=exc.errors())
 
     # 捕获全部异常
@@ -207,3 +213,29 @@ def register_middleware(app: FastAPI):
         response = await call_next(request)
 
         return response
+
+
+def register_redis(app: FastAPI) -> None:
+    """
+    把redis挂载到app对象上面
+    :param app:
+    :return:
+    """
+
+    @app.on_event('startup')
+    async def startup_event():
+        """
+        获取链接
+        :return:
+        """
+        app.state.redis = await create_redis_pool(settings.REDIS_URL)
+
+    @app.on_event('shutdown')
+    async def shutdown_event():
+        """
+        关闭
+        :return:
+        """
+        app.state.redis.close()
+        await app.state.redis.wait_closed()
+
