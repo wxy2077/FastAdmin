@@ -16,11 +16,10 @@ from sqlalchemy.orm import Session
 from core.security import get_password_hash, verify_password
 from api.common.curd_base import CRUDBase
 from api.models.auth import AdminUser
-# from api.admin.auth.schemas.user import UserCreate, UserUpdate
-from ..schemas.user import UserCreate, UserUpdate
+from ..schemas import user_schema
 
 
-class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
+class CRUDUser(CRUDBase[AdminUser, user_schema.UserCreate, user_schema.UserUpdate]):
 
     @staticmethod
     def get_by_email(db: Session, *, email: str) -> Optional[AdminUser]:
@@ -37,7 +36,7 @@ class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
         """
         return db.query(AdminUser).filter(AdminUser.email == email).first()
 
-    def create(self, db: Session, *, obj_in: UserCreate) -> AdminUser:
+    def create(self, db: Session, *, obj_in: user_schema.UserCreate) -> AdminUser:
         db_obj = AdminUser(
             nickname=obj_in.nickname,
             email=obj_in.email,
@@ -51,19 +50,6 @@ class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
         db.refresh(db_obj)
         return db_obj
 
-    # def update(
-    #         self, db: Session, *, db_obj: AdminUser, obj_in: Union[UserUpdate, Dict[str, Any]]
-    # ) -> AdminUser:
-    #     if isinstance(obj_in, dict):
-    #         update_data = obj_in
-    #     else:
-    #         update_data = obj_in.dict(exclude_unset=True)
-    #     if update_data["password"]:
-    #         hashed_password = get_password_hash(update_data["password"])
-    #         del update_data["password"]
-    #         update_data["hashed_password"] = hashed_password
-    #     return super().update(db, db_obj=db_obj, obj_in=update_data)
-
     def authenticate(self, db: Session, *, email: str, password: str) -> Optional[AdminUser]:
         user = self.get_by_email(db, email=email)
         if not user:
@@ -72,11 +58,9 @@ class CRUDUser(CRUDBase[AdminUser, UserCreate, UserUpdate]):
             return None
         return user
 
-    def is_active(self, user: AdminUser) -> bool:
-        return user.is_active
-
-    def is_superuser(self, user: AdminUser) -> bool:
-        return user.is_superuser
+    @staticmethod
+    def is_active(user: AdminUser) -> bool:
+        return user.is_active == 1
 
 
 curd_user = CRUDUser(AdminUser)

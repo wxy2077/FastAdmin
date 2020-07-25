@@ -15,10 +15,11 @@ from fastapi import APIRouter, Depends, Query
 from sqlalchemy.orm import Session
 
 from api.common import deps
+from api.common.logger import logger
 from api.utils import response_code
-from api.extensions import logger
-from .schemas.goods import CategoryCreate, CategoryUpdate, CategoryDel, CategoryEnable, CategorySearch
-from .crud.goods import curd_category
+
+from .schemas import category_schema
+from .crud.category import curd_category
 
 router = APIRouter()
 
@@ -57,7 +58,7 @@ async def query_category(
 
 @router.post("/add/category", summary="添加分类")
 async def add_category(
-        category_info: CategoryCreate,
+        category_info: category_schema.CategoryCreate,
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
 ):
@@ -68,7 +69,7 @@ async def add_category(
 
 @router.post("/modify/category", summary="修改分类")
 async def modify_category(
-        cate_info: CategoryUpdate,
+        cate_info: category_schema.CategoryUpdate,
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
 ):
@@ -80,7 +81,7 @@ async def modify_category(
 
 @router.post("/del/category", summary="删除分类")
 async def modify_category(
-        cate_ids: CategoryDel,
+        cate_ids: category_schema.CategoryDel,
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
 ):
@@ -92,23 +93,19 @@ async def modify_category(
 
 @router.post("/enabled/category", summary="分类开启或关闭")
 async def enabled_category(
-        cate_info: CategoryEnable,
+        cate_info: category_schema.CategoryEnable,
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
 ):
     logger.info(f"开启分类操作->用户id:{token_data.sub}分类id:{cate_info.ids}操作:{cate_info.enabled}")
     for cate_id in cate_info.ids:
         curd_category.update_enabled(db, id=cate_id, enabled=cate_info.enabled)
-    if cate_info.enabled == 1:
-        message = "开启分类成功"
-    else:
-        message = "关闭分类成功"
-    return response_code.resp_200(message=message)
+    return response_code.resp_200(message="操作成功")
 
 
 @router.post("/search/category", summary="搜索分类")
 async def search_category(
-        cate_info: CategorySearch,
+        cate_info: category_schema.CategorySearch,
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
 ):

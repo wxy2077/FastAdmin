@@ -11,7 +11,8 @@ from core import security
 from core.config import settings
 from api.db.session import SessionLocal
 from api.models.auth import AdminUser
-from api.api_v1.auth import schemas, crud
+from api.api_v1.auth.schemas import token_schema
+from api.api_v1.auth.crud import curd_user
 
 from api.utils import custom_exc
 
@@ -36,10 +37,10 @@ def check_jwt_token(
     try:
         payload = jwt.decode(
             token,
-            settings.SECRET_KEY, algorithms=[security.ALGORITHM]
+            settings.SECRET_KEY, algorithms=settings.JWT_ALGORITHM
         )
-        return schemas.TokenPayload(**payload)
-    except (jwt.JWTError, ValidationError, AttributeError):
+        return token_schema.TokenPayload(**payload)
+    except (jwt.JWTError, jwt.ExpiredSignatureError, ValidationError):
         raise custom_exc.UserTokenError(err_desc="access token fail")
 
 
@@ -56,25 +57,7 @@ def get_current_user(
         raise custom_exc.UserTokenError(err_desc='headers not found token')
 
     token_data = check_jwt_token(token)
-    user = crud.curd_user.get(db, id=token_data.sub)
+    user = curd_user.get(db, id=token_data.sub)
     if not user:
         raise custom_exc.UserNotFound(err_desc="user not found")
     return user
-
-
-# def get_current_active_user(
-#     current_user: models.User = Depends(get_current_user),
-# ) -> models.User:
-#     if not crud.user.is_active(current_user):
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#     return current_user
-#
-#
-# def get_current_active_superuser(
-#     current_user: models.User = Depends(get_current_user),
-# ) -> models.User:
-#     if not crud.user.is_superuser(current_user):
-#         raise HTTPException(
-#             status_code=400, detail="The user doesn't have enough privileges"
-#         )
-#     return current_user

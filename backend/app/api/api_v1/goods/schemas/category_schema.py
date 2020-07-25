@@ -1,29 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-# @Time    : 2020/7/17 14:34
+# @Time    : 2020/7/25 09:00
 # @Author  : CoderCharm
-# @File    : goods.py
+# @File    : category_schema.py
 # @Software: PyCharm
 # @Github  : github/CoderCharm
 # @Email   : wg_python@163.com
 # @Desc    :
 """
-验证 goods 的模型
+
 """
 from typing import Union, List
 from pydantic import BaseModel, AnyHttpUrl, conint
-
-
-class GoodsBase(BaseModel):
-    pass
-
-
-class GoodsCreate(GoodsBase):
-    """
-    新增商品
-    """
-
-    pass
 
 
 class CategoryCreate(BaseModel):

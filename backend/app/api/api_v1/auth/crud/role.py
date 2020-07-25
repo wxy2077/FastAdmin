@@ -14,10 +14,10 @@ from sqlalchemy.orm import Session
 
 from api.common.curd_base import CRUDBase
 from api.models.auth import AdminRole
-from api.api_v1.auth.schemas import RoleCreate, RoleUpdate
+from ..schemas import role_schema
 
 
-class CRUDRole(CRUDBase[AdminRole, RoleCreate, RoleUpdate]):
+class CRUDRole(CRUDBase[AdminRole, role_schema.RoleCreate, role_schema.RoleUpdate]):
 
     @staticmethod
     def query_role(db: Session, *, role_id: int) -> Optional[AdminRole]:
@@ -29,7 +29,7 @@ class CRUDRole(CRUDBase[AdminRole, RoleCreate, RoleUpdate]):
         """
         return db.query(AdminRole).filter(AdminRole.role_id == role_id).first()
 
-    def create(self, db: Session, *, obj_in: RoleCreate) -> AdminRole:
+    def create(self, db: Session, *, obj_in: role_schema.RoleCreate) -> AdminRole:
         db_obj = AdminRole(
             role_id=obj_in.role_id,
             role_name=obj_in.role_name,

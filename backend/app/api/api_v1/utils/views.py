@@ -25,7 +25,7 @@ from tempfile import NamedTemporaryFile
 from fastapi import APIRouter, Depends, File, UploadFile
 
 from api.common import deps
-from api.extensions import logger
+from api.common.logger import logger
 from core.config import settings
 from api.utils import response_code
 

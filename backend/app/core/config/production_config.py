@@ -11,34 +11,33 @@
 
 """
 import os
-import secrets
+# import secrets
 from typing import List, Union
 
-from pydantic import AnyHttpUrl, BaseSettings, validator, IPvAnyAddress
+from pydantic import AnyHttpUrl, BaseSettings, IPvAnyAddress, EmailStr
 
 
 class Settings(BaseSettings):
     DEBUG: bool = False
 
-    API_V1_STR: str = "/api/v1"
-    SECRET_KEY: str = secrets.token_urlsafe(32)
+    API_V1_STR: str = "/api/mall/v1"
+    SECRET_KEY: str = os.getenv("SECRET_KEY")
+
+    # jwt加密算法
+    JWT_ALGORITHM: str = "HS256"
     # 60 minutes * 24 hours * 8 days = 8 days
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
-    SERVER_NAME: str
-    SERVER_HOST: AnyHttpUrl
-    # BACKEND_CORS_ORIGINS is a JSON-formatted list of origins
-    # e.g: '["http://localhost", "http://localhost:4200", "http://localhost:3000", \
-    # "http://localhost:8080", "http://local.dockertoolbox.tiangolo.com"]'
-    # 跨域
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl] = ['*']
+    # 根路径
+    BASE_DIR: str = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-    @validator("BACKEND_CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
+    # 项目信息
+    PROJECT_NAME: str = "FastAdmin"
+    DESCRIPTION: str = "更多信息查看 https://www.charmcode.cn/"
+    SERVER_NAME: str = "API_V1"
+    SERVER_HOST: AnyHttpUrl = "http://domain.com"
+
+    # 跨域配置
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl, str] = ['*']
 
     # mysql 配置
     MYSQL_USERNAME: str = os.getenv("MYSQL_USER", "root")
@@ -49,8 +48,19 @@ class Settings(BaseSettings):
     SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{MYSQL_USERNAME}:{MYSQL_PASSWORD}@" \
                               f"{MYSQL_HOST}/{MYSQL_DATABASE}?charset=utf8mb4"
 
-    FIRST_SUPERUSER: str
-    FIRST_SUPERUSER_PASSWORD: str
+    # 基本角色权限 个人没做过权限设置 但是也看过一些开源项目就这样设计吧
+    DEFAULT_ROLE: List[dict] = [
+        {"role_id": 100, "role_name": "普通员工", "permission_id": 100},
+        {"role_id": 500, "role_name": "主管", "permission_id": 500},
+        {"role_id": 999, "role_name": "超级管理员", "permission_id": 999, "re_mark": "最高权限的超级管理员"},
+    ]
+
+    # 默认生成用户数据
+    FIRST_SUPERUSER: str = "王小右"
+    FIRST_MALL: EmailStr = "wg_python@163.com"
+    FIRST_SUPERUSER_PASSWORD: str = "admin12345"
+    FIRST_ROLE: int = 999  # 超级管理员
+    FIRST_AVATAR: AnyHttpUrl = "https://avatar-static.segmentfault.com/106/603/1066030767-5d396cc440024_huge256"
 
     class Config:
         case_sensitive = True

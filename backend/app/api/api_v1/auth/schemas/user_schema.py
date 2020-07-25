@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2020/7/7 16:23
 # @Author  : CoderCharm
-# @File    : user.py
+# @File    : user_schema.py
 # @Software: PyCharm
 # @Desc    :
 """
 
 """
 
-from typing import Optional
+from typing import Optional, Union
 
 from pydantic import BaseModel, EmailStr, AnyHttpUrl
+
+
+from api.common.schemas_base import RespBase
 
 
 # Shared properties
@@ -66,3 +69,8 @@ class UserInfo(BaseModel):
     role: str
     nickname: str
     avatar: AnyHttpUrl
+
+
+class RespUserInfo(RespBase):
+    # 响应用户信息
+    data: UserInfo

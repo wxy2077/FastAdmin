@@ -17,22 +17,23 @@ from core import security
 
 from api.common import deps
 from api.utils import response_code
-from api.extensions import logger
+from api.common.logger import logger
 
 from api.models import auth
 from core.config import settings
 
-from .schemas import user
+from .schemas import user_schema, token_schema
+
 from .crud import curd_user, curd_role
 
 router = APIRouter()
 
 
-@router.post("/login/access-token", summary="用户登录认证")
+@router.post("/login/access-token", summary="用户登录认证", response_model=token_schema.RespToken)
 async def login_access_token(
         *,
         db: Session = Depends(deps.get_db),
-        user_info: user.UserEmailAuth,
+        user_info: user_schema.UserEmailAuth,
 ) -> Any:
     """
     用户登录
@@ -54,11 +55,10 @@ async def login_access_token(
     # 登录token 只存放了user.id
     return response_code.resp_200(data={
         "token": security.create_access_token(user.id, expires_delta=access_token_expires),
-        "token_type": "Bearer",
     })
 
 
-@router.get("/user/info", summary="获取用户信息", response_model=user.UserInfo)
+@router.get("/user/info", summary="获取用户信息", response_model=user_schema.RespUserInfo)
 async def get_user_info(
         *,
         db: Session = Depends(deps.get_db),
@@ -80,7 +80,7 @@ async def get_user_info(
     })
 
 
-@router.post("/user/logout", summary="用户退出")
+@router.post("/user/logout", summary="用户退出", response_model=user_schema.RespBase)
 async def user_logout(token_data: Union[str, Any] = Depends(deps.check_jwt_token),):
     """
     用户退出
@@ -88,5 +88,5 @@ async def user_logout(token_data: Union[str, Any] = Depends(deps.check_jwt_token
     :return:
     """
     logger.info(f"用户退出->用户id:{token_data.sub}")
-    return response_code.resp_200(data="ok")
+    return response_code.resp_200(message="logout success")
 

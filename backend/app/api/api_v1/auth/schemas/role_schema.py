@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2020/7/11 10:57
 # @Author  : CoderCharm
-# @File    : role.py
+# @File    : role_schema.py
 # @Software: PyCharm
 # @Desc    :
 """
