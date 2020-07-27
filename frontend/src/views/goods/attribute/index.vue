@@ -3,13 +3,13 @@
     <div class="box-wrapper">
       <el-tabs v-model="activeName" class="tab-box">
         <el-tab-pane label="商品分类" name="first">
-          <div v-if="showCategoryList" class="PageList">
+          <div v-show="showCategoryList" class="PageList">
             <el-button type="primary" @click="switchView">
               新增分类
             </el-button>
             <category-list-view @editCate="editCate" />
           </div>
-          <div v-if="!showCategoryList" class="add-category">
+          <div v-show="!showCategoryList" class="add-category">
             <el-button type="primary" @click="switchView">
               返回列表
             </el-button>

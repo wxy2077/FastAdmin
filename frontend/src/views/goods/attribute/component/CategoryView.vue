@@ -45,7 +45,7 @@
           <template v-if="modifyCateId">立即修改</template>
           <template v-else>立即创建</template>
         </el-button>
-        <el-button @click="resetFrom('form')" type="success" plain>重置表单</el-button>
+        <el-button type="success" plain @click="resetFrom('form')">重置表单</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -92,11 +92,7 @@
       },
       fileArr() {
         // 上传图片 显示默认图片
-        if (this.form.icon_url) {
-          return [{ url: this.form.icon_url }]
-        } else {
-          return []
-        }
+        return this.form.icon_url ? [{ url: this.form.icon_url }] : []
       }
     },
     mounted() {
