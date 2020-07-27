@@ -18,7 +18,7 @@ from api.common import deps
 from api.common.logger import logger
 from api.utils import response_code
 
-from .schemas import category_schema
+from .schemas import goods_schema, category_schema
 from .crud.category import curd_category
 
 router = APIRouter()
@@ -26,10 +26,11 @@ router = APIRouter()
 
 @router.post("/add/goods", summary="添加商品")
 async def goods_add(
+        goods_info: goods_schema.GoodsCreate,
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
 ):
-    # TODO(新增商品)
+    logger.info(goods_info)
     return response_code.resp_200(data="ok")
 
 

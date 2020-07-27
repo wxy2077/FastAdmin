@@ -22,40 +22,23 @@ class GoodsCreate(GoodsBase):
     """
     新增商品
     """
-    """
-    goods_id = Column(VARCHAR(128), default=gen_uuid, index=True, unique=True, comment="商品id")
-    category_id = Column(Integer, default=0, index=True, comment="分类id")
-    is_on_sale = Column(Integer, default=1, comment="是否售卖 0=否 1=是")
-    goods_name = Column(VARCHAR(64), comment="商品名称")
-    goods_number = Column(Integer, default=0, index=True, comment="商品数量")
-    specification_id = Column(Integer, index=True, comment="商品规格id")
-    keywords = Column(VARCHAR(256), default=0, comment="商品关键字")
-    sell_volume = Column(Integer, default=0, comment="销售量")
-    retail_price = Column(DECIMAL(10, 2), comment="零售价,单价")
-    min_retail_price = Column(DECIMAL(10, 2), default=0, comment="最低零售价")
-    cost_price = Column(DECIMAL(10, 2), default=0, comment="成本价")
-    min_cost_price = Column(DECIMAL(10, 2), default=0, comment="最低成本价")
-    goods_brief = Column(VARCHAR(256), comment="商品简介")
-    goods_desc = Column(TEXT, comment="商品描述")
-    sort_order = Column(SmallInteger, default=100, index=True, comment="排序")
-    is_index = Column(SmallInteger, default=0)
-    is_new = Column(SmallInteger, default=0, comment="是否新品推荐")
-    goods_unit = Column(VARCHAR(45), comment="商品单位")
-    list_prc_banner = Column(VARCHAR(256), comment="商品banner")
-    list_pic_url = Column(VARCHAR(256), comment="商品列表图")
-    freight_template_id = Column(SmallInteger, default=0, comment="配运模版id")
-    freight_type = Column(VARCHAR(256), default=0, comment="配运类型")
-    """
+    goods_name: str
+    goods_brief: str  # 商品简介
     category_id: int  # 分类
     is_on_sale: int = 1  # 是在售卖
-    goods_name: str
-    goods_brief: str
-    list_pic_url: str
-    goods_unit: str   # 商品单位
+    pic_banner: str = None  # 封面 没有取轮播图第一张
+    list_pic_url: str  # 轮播图
+    goods_unit: str  # 商品单位
     sell_volume: int  # 销量
-    goods_desc: str   # 商品详情
-
-
-
-
-
+    goods_desc_type: int = 1  # 详情内容1=富文本 2=MarkDown
+    goods_desc: str  # 商品详情
+    specification_id: int  # 商品规格 重量 长度 颜色 尺码
+    specification_name: str  # 商品规格名称 如
+    specification_unit: str  # 规格单位 如斤 克
+    specification_memo: str  # 补充说明 如每袋5个装
+    goods_number: float  # 库存数量
+    retail_price: float  # 零售价
+    min_retail_price: float  # 最低零售价
+    is_new: int = 0  # 是否新品 默认0
+    freight_template_id: int  # 运费模版id
+    sort_order: int = 1  # 排序
