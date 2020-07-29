@@ -46,7 +46,7 @@ async def query_category_list(
     return response_code.resp_200(data=response_result)
 
 
-@router.get("/query/category/", summary="查询分类")
+@router.get("/query/category", summary="查询分类")
 async def query_category(
         db: Session = Depends(deps.get_db),
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),

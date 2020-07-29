@@ -32,7 +32,7 @@ from api.utils import response_code
 router = APIRouter()
 
 
-@router.post("/upload/file/", summary="上传图片")
+@router.post("/upload/file", summary="上传图片")
 async def upload_image(
         token_data: Union[str, Any] = Depends(deps.check_jwt_token),
         file: UploadFile = File(...)
