@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <div class="box-wrapper">
-      <div v-if="showGoodsList" class="PageList">
+      <div v-show="showGoodsList" class="PageList">
         <el-button type="primary" @click="switchView">
           新增商品
         </el-button>
         <goods-list-view />
       </div>
-      <div v-if="!showGoodsList" class="add-category">
+      <div v-show="!showGoodsList" class="add-category">
         <el-button type="primary" @click="switchView">
           返回列表
         </el-button>

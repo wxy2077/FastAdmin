@@ -82,9 +82,9 @@
         <el-form-item label="商品详情" required>
           <el-radio v-model="form.goods_desc_type" :label="1">富文本编辑器</el-radio>
           <el-radio v-model="form.goods_desc_type" :label="2">MarkDown编辑器</el-radio>
-          <!-- TODO(待完善图片上传等细节) -->
-          <Tinymce v-show="form.goods_desc_type===1" ref="editor" v-model="form.goods_desc" :height="400" />
-          <markdown-editor v-show="form.goods_desc_type===2" height="400px"></markdown-editor>
+          <Tinymce v-show="form.goods_desc_type===1" ref="editor" v-model="form.goods_desc" :height="400" @input="TinInput" />
+          <!--<vue-markdown v-show="form.goods_desc_type===2" v-model="form.goods_desc" />-->
+          <!--<wang-editor></wang-editor>-->
         </el-form-item>
       </el-form>
     </el-row>
@@ -93,14 +93,16 @@
 
 <script>
   import { getToken } from '@/utils/auth'
+  import { commonSetting } from '@/utils/common'
   import Tinymce from '@/components/Tinymce'
-  import MarkdownEditor from '@/components/MarkdownEditor'
+  // import WangEditor from '@/components/WangEditor'
 
   export default {
     name: 'GoodsView',
     components: {
-      Tinymce,
-      MarkdownEditor
+      // WangEditor
+      Tinymce
+      // VueMarkdown
     },
     data() {
       return {
@@ -121,7 +123,7 @@
           { id: 1, name: '居家' },
           { id: 2, name: '生活' }
         ],
-        actionUrl: 'http://127.0.0.1:8010/api/mall/v1/admin/utils/upload/file/'
+        actionUrl: commonSetting.uploadUrl
       }
     },
     computed: {
@@ -168,6 +170,10 @@
       },
       handleListImgRemove(file, fileList) {
         console.log(file, fileList)
+      },
+      TinInput(v) {
+        this.form.goods_desc = v
+        console.log('接收到到值', v)
       }
     }
   }

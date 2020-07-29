@@ -13,7 +13,7 @@
 
       <el-form-item label="分类图片" required>
         <el-upload
-          action="http://127.0.0.1:8010/api/mall/v1/admin/utils/upload/file/"
+          :action="actionUrl"
           :headers="headers"
           list-type="picture-card"
           :file-list="fileArr"
@@ -54,6 +54,7 @@
 <script>
   import { addCategory, getCategory, modifyCategory } from '@/api/goods'
   import { getToken } from '@/utils/auth'
+  import { commonSetting } from '@/utils/common'
 
   export default {
     name: 'CategoryView',
@@ -80,7 +81,8 @@
           front_desc: [
             { min: 1, max: 30, message: '长度限制1到30个字符', trigger: 'blur' }
           ]
-        }
+        },
+        actionUrl: commonSetting.uploadUrl
       }
     },
     computed: {

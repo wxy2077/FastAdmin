@@ -1,23 +1,23 @@
 <template>
   <div class="CategoryListView">
     <el-row :gutter="3" class="list-operation">
-      <el-col :span="8" xs="12">
+      <el-col :span="8" :xs="12">
         <div class="grid-content bg-purple">
           <el-input v-model="key_world" placeholder="搜索分类,描述" clearable style="width: 350px"></el-input>
           <el-button type="primary" plain @click="searchCate">搜索</el-button>
         </div>
       </el-col>
-      <el-col :span="2" xs="6">
+      <el-col :span="2" :xs="6">
         <div class="grid-content bg-purple">
           <el-button type="success" plain @click="multipleEnabled(1)">批量开启</el-button>
         </div>
       </el-col>
-      <el-col :span="2" xs="6">
+      <el-col :span="2" :xs="6">
         <div class="grid-content bg-purple">
           <el-button type="warning" plain @click="multipleEnabled(0)">批量关闭</el-button>
         </div>
       </el-col>
-      <el-col :span="3" xs="6">
+      <el-col :span="3" :xs="6">
         <div class="grid-content bg-purple">
           <el-button type="danger" @click="multipleDel">批量删除</el-button>
         </div>
