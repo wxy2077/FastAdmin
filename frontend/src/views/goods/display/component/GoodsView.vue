@@ -83,8 +83,7 @@
           <el-radio v-model="form.goods_desc_type" :label="1">富文本编辑器</el-radio>
           <el-radio v-model="form.goods_desc_type" :label="2">MarkDown编辑器</el-radio>
           <Tinymce v-show="form.goods_desc_type===1" ref="editor" v-model="form.goods_desc" :height="400" @input="TinInput" />
-          <!--<vue-markdown v-show="form.goods_desc_type===2" v-model="form.goods_desc" />-->
-          <!--<wang-editor></wang-editor>-->
+          <mavon-editor v-show="form.goods_desc_type===2" v-model="form.goods_desc" :ishljs="true" code-style="atom-one-dark" />
         </el-form-item>
       </el-form>
     </el-row>
@@ -95,14 +94,11 @@
   import { getToken } from '@/utils/auth'
   import { commonSetting } from '@/utils/common'
   import Tinymce from '@/components/Tinymce'
-  // import WangEditor from '@/components/WangEditor'
 
   export default {
     name: 'GoodsView',
     components: {
-      // WangEditor
       Tinymce
-      // VueMarkdown
     },
     data() {
       return {
@@ -115,7 +111,7 @@
           goods_unit: '',
           is_on_sale: 1,
           sell_volume: 0, // 销量
-          goods_desc_type: 1, // 商品详情格式1=富文本 2=MarkDown
+          goods_desc_type: 2, // 商品详情格式1=富文本 2=MarkDown
           goods_desc: '' // 商品详情
         },
         rules: {},

@@ -117,19 +117,3 @@ export function param2Obj(url) {
   })
   return obj
 }
-
-/**
- * @param fun  防抖函数
- * @param delay 延迟时间
- * */
-export function debounce(fun, delay) {
-  let timer = null
-  return (...args) => {
-    if (!timer) {
-      clearTimeout(timer)
-    }
-    timer = setTimeout(() => {
-      fun.call(this, args)
-    }, delay)
-  }
-}
