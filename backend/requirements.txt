@@ -8,7 +8,7 @@ click==7.1.2
 dnspython==1.16.0
 ecdsa==0.15
 email-validator==1.1.1
-fastapi==0.60.1
+fastapi==0.65.2
 gunicorn==20.0.4
 h11==0.9.0
 hiredis==1.1.0
